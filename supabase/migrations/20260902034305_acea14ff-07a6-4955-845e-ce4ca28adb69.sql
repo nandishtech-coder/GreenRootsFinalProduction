@@ -1,0 +1,6 @@
+ALTER TABLE public.services
+  ADD COLUMN IF NOT EXISTS about text NOT NULL DEFAULT '',
+  ADD COLUMN IF NOT EXISTS includes text[] NOT NULL DEFAULT '{}',
+  ADD COLUMN IF NOT EXISTS cta_heading text NOT NULL DEFAULT 'Book a Consultation',
+  ADD COLUMN IF NOT EXISTS cta_note text NOT NULL DEFAULT '',
+  ADD COLUMN IF NOT EXISTS footnote text NOT NULL DEFAULT '';
