@@ -1239,17 +1239,19 @@ export function Footer({ isAdmin }: { isAdmin?: boolean } = {}) {
           </div>
 
           <div className="flex flex-col gap-4 md:flex-row md:items-center md:gap-8">
-            <div className="flex gap-4">
-              <Link to="/privacy-policy" className="transition-colors hover:text-cream">
-                Privacy Policy
-              </Link>
-              <Link to="/terms-of-service" className="transition-colors hover:text-cream">
-                Terms of Service
-              </Link>
-              <Link to="/refund-policy" className="transition-colors hover:text-cream">
-                Refund Policy
-              </Link>
-            </div>
+            {!isAdmin && (
+              <div className="flex gap-4">
+                <Link to="/privacy-policy" className="transition-colors hover:text-cream">
+                  Privacy Policy
+                </Link>
+                <Link to="/terms-of-service" className="transition-colors hover:text-cream">
+                  Terms of Service
+                </Link>
+                <Link to="/refund-policy" className="transition-colors hover:text-cream">
+                  Refund Policy
+                </Link>
+              </div>
+            )}
 
             <a
               href="#top"

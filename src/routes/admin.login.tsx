@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { supabase } from "@/integrations/supabase/client";
-import { lovable } from "@/integrations/lovable/index";
+
 
 const title = "Admin Login — GreenRoots Storefront";
 const description =
@@ -67,24 +67,12 @@ function AdminLogin() {
       return;
     }
     if (data.session) {
-      navigate({ to: "/admin", replace: true });
+      // If a session is returned immediately, we log them out pending admin approval
+      await supabase.auth.signOut();
+      toast.success("Account created. Shortly an admin will give you access.");
       return;
     }
-    toast.success("Check your email to confirm the account, then sign in.");
-  };
-
-  const google = async () => {
-    setBusy(true);
-    const result = await lovable.auth.signInWithOAuth("google", {
-      redirect_uri: window.location.origin,
-    });
-    if (result.error) {
-      setBusy(false);
-      toast.error("Google sign-in failed. Please try again.");
-      return;
-    }
-    if (result.redirected) return;
-    navigate({ to: "/admin", replace: true });
+    toast.success("Account created. Shortly an admin will give you access.");
   };
 
   return (
@@ -141,20 +129,6 @@ function AdminLogin() {
           </TabsContent>
         </Tabs>
 
-        <div className="my-6 flex items-center gap-3 text-xs text-muted-foreground">
-          <span className="h-px flex-1 bg-border" />
-          or
-          <span className="h-px flex-1 bg-border" />
-        </div>
-
-        <Button
-          variant="outline"
-          onClick={google}
-          disabled={busy}
-          className="h-11 w-full rounded-xl"
-        >
-          Continue with Google
-        </Button>
       </div>
     </main>
   );
