@@ -17,6 +17,7 @@ import {
   Hero,
   MainServices,
   TrustRibbon,
+  FeaturedProducts,
 } from "@/components/store/Sections";
 import { HorticultureWorkforce } from "@/components/store/HorticultureWorkforce";
 import {
@@ -112,6 +113,9 @@ function Index() {
               </Reveal>
               <Reveal variant="left">
                 <FanFavorites />
+              </Reveal>
+              <Reveal variant="left">
+                <FeaturedProducts />
               </Reveal>
               <Reveal variant="left">
                 <LatestBlogs />
