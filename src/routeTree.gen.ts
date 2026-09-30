@@ -15,6 +15,7 @@ import { Route as AboutUsRouteImport } from './routes/about-us'
 import { Route as BlogsRouteImport } from './routes/blogs'
 import { Route as GreenGiftsRouteImport } from './routes/green-gifts'
 import { Route as PrivacyPolicyRouteImport } from './routes/privacy-policy'
+import { Route as ProductsRouteImport } from './routes/products'
 import { Route as RefundPolicyRouteImport } from './routes/refund-policy'
 import { Route as TermsOfServiceRouteImport } from './routes/terms-of-service'
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated.admin'
@@ -51,6 +52,11 @@ const GreenGiftsRoute = GreenGiftsRouteImport.update({
 const PrivacyPolicyRoute = PrivacyPolicyRouteImport.update({
   id: '/privacy-policy',
   path: '/privacy-policy',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProductsRoute = ProductsRouteImport.update({
+  id: '/products',
+  path: '/products',
   getParentRoute: () => rootRouteImport,
 } as any)
 const RefundPolicyRoute = RefundPolicyRouteImport.update({
@@ -100,6 +106,7 @@ export interface FileRoutesByFullPath {
   '/blogs': typeof BlogsRoute
   '/green-gifts': typeof GreenGiftsRoute
   '/privacy-policy': typeof PrivacyPolicyRoute
+  '/products': typeof ProductsRoute
   '/refund-policy': typeof RefundPolicyRoute
   '/terms-of-service': typeof TermsOfServiceRoute
   '/admin': typeof AuthenticatedAdminRoute
@@ -115,6 +122,7 @@ export interface FileRoutesByTo {
   '/blogs': typeof BlogsRoute
   '/green-gifts': typeof GreenGiftsRoute
   '/privacy-policy': typeof PrivacyPolicyRoute
+  '/products': typeof ProductsRoute
   '/refund-policy': typeof RefundPolicyRoute
   '/terms-of-service': typeof TermsOfServiceRoute
   '/admin': typeof AuthenticatedAdminRoute
@@ -132,6 +140,7 @@ export interface FileRoutesById {
   '/blogs': typeof BlogsRoute
   '/green-gifts': typeof GreenGiftsRoute
   '/privacy-policy': typeof PrivacyPolicyRoute
+  '/products': typeof ProductsRoute
   '/refund-policy': typeof RefundPolicyRoute
   '/terms-of-service': typeof TermsOfServiceRoute
   '/_authenticated/admin': typeof AuthenticatedAdminRoute
@@ -149,6 +158,7 @@ export interface FileRouteTypes {
     | '/blogs'
     | '/green-gifts'
     | '/privacy-policy'
+    | '/products'
     | '/refund-policy'
     | '/terms-of-service'
     | '/admin'
@@ -164,6 +174,7 @@ export interface FileRouteTypes {
     | '/blogs'
     | '/green-gifts'
     | '/privacy-policy'
+    | '/products'
     | '/refund-policy'
     | '/terms-of-service'
     | '/admin'
@@ -180,6 +191,7 @@ export interface FileRouteTypes {
     | '/blogs'
     | '/green-gifts'
     | '/privacy-policy'
+    | '/products'
     | '/refund-policy'
     | '/terms-of-service'
     | '/_authenticated/admin'
@@ -197,6 +209,7 @@ export interface RootRouteChildren {
   BlogsRoute: typeof BlogsRoute
   GreenGiftsRoute: typeof GreenGiftsRoute
   PrivacyPolicyRoute: typeof PrivacyPolicyRoute
+  ProductsRoute: typeof ProductsRoute
   RefundPolicyRoute: typeof RefundPolicyRoute
   TermsOfServiceRoute: typeof TermsOfServiceRoute
   AdminLoginRoute: typeof AdminLoginRoute
@@ -248,6 +261,13 @@ declare module '@tanstack/react-router' {
       path: '/privacy-policy'
       fullPath: '/privacy-policy'
       preLoaderRoute: typeof PrivacyPolicyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/products': {
+      id: '/products'
+      path: '/products'
+      fullPath: '/products'
+      preLoaderRoute: typeof ProductsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/refund-policy': {
@@ -328,6 +348,7 @@ const rootRouteChildren: RootRouteChildren = {
   BlogsRoute: BlogsRoute,
   GreenGiftsRoute: GreenGiftsRoute,
   PrivacyPolicyRoute: PrivacyPolicyRoute,
+  ProductsRoute: ProductsRoute,
   RefundPolicyRoute: RefundPolicyRoute,
   TermsOfServiceRoute: TermsOfServiceRoute,
   AdminLoginRoute: AdminLoginRoute,

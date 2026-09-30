@@ -269,10 +269,10 @@ export function Hero() {
                     <p className="max-w-lg text-base text-cream/80 lg:text-lg">{s.copy}</p>
                     <div className="flex flex-wrap gap-3">
                       <Button size="lg" className="rounded-xl" asChild>
-                        <a href="#products">
+                        <Link to="/products">
                           Shop Best Sellers
                           <ArrowRight className="size-4" />
-                        </a>
+                        </Link>
                       </Button>
                       <Button
                         size="lg"

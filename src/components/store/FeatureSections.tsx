@@ -130,10 +130,10 @@ export function FanFavorites() {
               asChild
               className="mt-10 h-14 w-full rounded-full bg-forest px-8 text-base font-medium text-forest-foreground hover:bg-forest-deep sm:w-auto"
             >
-              <a href="#products">
+              <Link to="/products">
                 Shop Best Sellers
                 <ArrowRight className="ml-2 size-4" />
-              </a>
+              </Link>
             </Button>
           </div>
 
