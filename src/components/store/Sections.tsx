@@ -1188,11 +1188,11 @@ export function Footer({ isAdmin }: { isAdmin?: boolean } = {}) {
               </li>
               <li>
                 <a
-                  href="mailto:contact@greenroots.com"
+                  href="mailto:anilkumarainfo4u@gmail.com"
                   className="flex items-center gap-3 transition-colors hover:text-primary"
                 >
                   <Mail className="size-4 shrink-0" />
-                  contact@greenroots.com
+                  anilkumarainfo4u@gmail.com
                 </a>
               </li>
               <li>
@@ -1206,7 +1206,7 @@ export function Footer({ isAdmin }: { isAdmin?: boolean } = {}) {
               </li>
               <li className="flex items-start gap-3">
                 <MapPin className="size-4 shrink-0 mt-0.5" />
-                <span>Jalahalli, Karnataka 563125</span>
+                <span>V4 Bliss, 14th Cross Rd, Bhattarahalli, Chikkabasavanapura, Krishnarajapuram, Bengaluru, Karnataka 560049</span>
               </li>
               <li className="flex items-start gap-3">
                 <Clock className="size-4 shrink-0 mt-0.5" />

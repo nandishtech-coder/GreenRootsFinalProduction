@@ -327,14 +327,14 @@ export function ContactSection() {
                 <Mail className="size-6 text-gray-400" />
                 <div>
                   <p className="text-xs font-semibold text-gray-400 uppercase">EMAIL</p>
-                  <p className="font-bold text-gray-900">hello@greenroots.in</p>
+                  <p className="font-bold text-gray-900">anilkumarainfo4u@gmail.com</p>
                 </div>
               </div>
               <div className="flex items-center gap-4 rounded-2xl bg-white p-6 shadow-sm">
                 <MapPin className="size-6 text-forest fill-forest/10" />
                 <div>
                   <p className="text-xs font-semibold text-gray-400 uppercase">STORE ADDRESS</p>
-                  <p className="font-bold text-gray-900">Shettihalli, Karnataka 563125</p>
+                  <p className="font-bold text-gray-900">V4 Bliss, 14th Cross Rd, Bhattarahalli, Chikkabasavanapura, Krishnarajapuram, Bengaluru, Karnataka 560049</p>
                 </div>
               </div>
               <div className="flex items-center gap-4 rounded-2xl bg-white p-6 shadow-sm">
@@ -529,7 +529,7 @@ export function MapSection() {
       </div>
       <div className="h-[500px] w-full">
         <iframe
-          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15518.90186980077!2d78.01177659625577!3d13.491006889985085!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bb21c7e1cf91f4d%3A0x5c945022fda265db!2sShettihalli%2C%20Karnataka%20563125!5e0!3m2!1sen!2sin!4v1787760071605!5m2!1sen!2sin"
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3887.336594773083!2d77.7067568!3d13.0142245!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bae11ac4357c743%3A0xbbb0a073b452c63c!2sV4%20Bliss%20Apartment!5e0!3m2!1sen!2sin!4v1791210592720!5m2!1sen!2sin"
           width="100%"
           height="100%"
           style={{ border: 0 }}
