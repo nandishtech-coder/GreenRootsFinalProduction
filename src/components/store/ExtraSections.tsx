@@ -44,6 +44,25 @@ import { listServices } from "@/lib/services.functions";
 import { toast } from "sonner";
 import confetti from "canvas-confetti";
 
+// Opens WhatsApp app first; falls back to WhatsApp Web after 1.5s if app doesn't launch
+function openWhatsApp(phone: string) {
+  const appUrl = `whatsapp://send?phone=${phone}`;
+  const webUrl = `https://wa.me/${phone}`;
+  const start = Date.now();
+  // Try to open the native app via hidden iframe trick
+  const iframe = document.createElement("iframe");
+  iframe.style.display = "none";
+  iframe.src = appUrl;
+  document.body.appendChild(iframe);
+  setTimeout(() => {
+    document.body.removeChild(iframe);
+    // If page is still visible (app didn't open), go to web fallback
+    if (Date.now() - start < 2000) {
+      window.open(webUrl, "_blank", "noopener,noreferrer");
+    }
+  }, 1500);
+}
+
 export function ReviewsSection() {
   const fetchFeedback = useServerFn(listFeedback);
   const { data: feedback = [] } = useQuery({
@@ -327,7 +346,7 @@ export function ContactSection() {
                 <Mail className="size-6 text-gray-400" />
                 <div>
                   <p className="text-xs font-semibold text-gray-400 uppercase">EMAIL</p>
-                  <p className="font-bold text-gray-900">anilkumarainfo4u@gmail.com</p>
+                  <p className="font-bold text-gray-900">walkintogreenroonts@gmail.com</p>
                 </div>
               </div>
               <div className="flex items-center gap-4 rounded-2xl bg-white p-6 shadow-sm">
@@ -498,7 +517,9 @@ export function MapSection() {
         <h4 className="mb-4 text-sm font-semibold text-gray-500">Follow us on social media</h4>
         <div className="flex gap-4">
           <a
-            href="#"
+            href="https://www.instagram.com/green_rootskitchengarden"
+            target="_blank"
+            rel="noopener noreferrer"
             className="flex size-10 items-center justify-center rounded-full border border-pink-200 bg-white text-pink-500 transition-all duration-300 hover:-translate-y-1 hover:bg-gradient-to-tr hover:from-yellow-400 hover:via-pink-500 hover:to-purple-500 hover:text-white hover:border-transparent hover:shadow-lg hover:shadow-pink-500/20"
             aria-label="Instagram"
           >
@@ -512,14 +533,17 @@ export function MapSection() {
             <Facebook className="size-4" />
           </a>
           <a
-            href="#"
+            href="whatsapp://send?phone=916360988785"
+            onClick={(e) => { e.preventDefault(); openWhatsApp("916360988785"); }}
             className="flex size-10 items-center justify-center rounded-full border border-green-200 bg-white text-green-500 transition-all duration-300 hover:-translate-y-1 hover:bg-green-500 hover:text-white hover:border-green-500 hover:shadow-lg hover:shadow-green-500/20"
             aria-label="WhatsApp"
           >
             <WhatsappIcon className="size-4" />
           </a>
           <a
-            href="#"
+            href="https://www.youtube.com/@GreenRootsKitchenGarden"
+            target="_blank"
+            rel="noopener noreferrer"
             className="flex size-10 items-center justify-center rounded-full border border-red-200 bg-white text-red-500 transition-all duration-300 hover:-translate-y-1 hover:bg-red-500 hover:text-white hover:border-red-500 hover:shadow-lg hover:shadow-red-500/20"
             aria-label="YouTube"
           >

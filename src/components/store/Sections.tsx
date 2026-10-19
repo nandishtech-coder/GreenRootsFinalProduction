@@ -68,12 +68,33 @@ import { BLOGS, PRODUCTS } from "@/lib/store-data";
 
 import { ProductCard } from "./ProductCard";
 import { Reveal } from "./Reveal";
+
+// Opens WhatsApp app first; falls back to WhatsApp Web after 1.5 s if app is not installed
+function openWhatsApp(phone: string) {
+  const iframe = document.createElement("iframe");
+  iframe.style.display = "none";
+  iframe.src = `whatsapp://send?phone=${phone}`;
+  document.body.appendChild(iframe);
+  const start = Date.now();
+  setTimeout(() => {
+    document.body.removeChild(iframe);
+    if (Date.now() - start < 2000) {
+      window.open(`https://wa.me/${phone}`, "_blank", "noopener,noreferrer");
+    }
+  }, 1500);
+}
 import hero from "@/assets/hero-balcony.jpg";
 import gifting from "@/assets/gifting.jpg";
 import plants from "@/assets/p-plants.jpg";
 import ceramic from "@/assets/p-ceramic.jpg";
 import servicesPeaceLily from "@/assets/services-peace-lily.jpg";
 import villageFarm from "@/assets/village-farm.png";
+import heroSlide1 from "@/assets/hero-slide-1.png";
+import heroSlide2 from "@/assets/hero-slide-2.png";
+import heroSlide3 from "@/assets/hero-slide-3.png";
+import heroSlide4 from "@/assets/hero-slide-4.png";
+import heroIndoorPlants from "@/assets/hero-indoor-plants.png";
+import heroCeramicPlanters from "@/assets/hero-ceramic-planters.png";
 import imgGardenConsultancy from "@/assets/services/garden_consultancy_1788056389914.png";
 import imgTerraceRooftopGardening from "@/assets/services/terrace_rooftop_gardening_1788056478087.png";
 import imgBackyardGardenSetup from "@/assets/services/backyard_garden_setup_1788056493296.png";
@@ -88,22 +109,47 @@ import imgOrganicGardeningTrainingSetup from "@/assets/services/organic_gardenin
 
 const SLIDES = [
   {
-    image: villageFarm,
+    image: heroSlide1,
     eyebrow: "New season · Monsoon ready",
     title: "GreenRoots Gardening Made Effortless",
     copy: "Seeds, bio-fertilisers and designer planters curated for balconies, terraces and tiny windowsills.",
+    objectPosition: "center center",
   },
   {
-    image: plants,
+    image: heroSlide2,
+    eyebrow: "Bestselling collection",
+    title: "Elegant Plant Stands for Every Corner",
+    copy: "Round metal stands that elevate your favourite potted plants — perfect for living rooms, balconies and patios.",
+    objectPosition: "center center",
+  },
+  {
+    image: heroSlide3,
+    eyebrow: "Organise your green space",
+    title: "3-Tier Stands, Endless Possibilities",
+    copy: "Step-style metal plant racks to display your entire collection — from herbs to flowering beauties.",
+    objectPosition: "center center",
+  },
+  {
+    image: heroSlide4,
+    eyebrow: "Indoor & outdoor ready",
+    title: "Planters Worth Showing Off",
+    copy: "Hand-painted ceramic pots on sleek wire stands — ideal for both indoor décor and outdoor gardens.",
+    objectPosition: "center 60%",
+  },
+
+  {
+    image: heroIndoorPlants,
     eyebrow: "Bestselling collection",
     title: "Greener Corners, Cleaner Air",
     copy: "Hand-picked indoor plants that thrive in low light and forgive a missed watering or two.",
+    objectPosition: "center center",
   },
   {
-    image: ceramic,
+    image: heroCeramicPlanters,
     eyebrow: "Studio-made in India",
     title: "Planters Worth Showing Off",
     copy: "Small-batch ceramic, clay and metal planters finished by hand, from ₹199.",
+    objectPosition: "center center",
   },
 ];
 
@@ -244,18 +290,19 @@ export function Hero() {
           <CarouselContent className="ml-0">
             {SLIDES.map((s, i) => (
               <CarouselItem key={s.title} className="pl-0">
-                <div className="relative min-h-[440px] overflow-hidden rounded-3xl lg:min-h-[560px]">
+                <div className="relative min-h-[400px] overflow-hidden rounded-3xl lg:min-h-[480px]" style={{ backgroundColor: '#1a3a2a' }}>
                   <img
                     src={s.image}
                     alt={s.title}
                     loading={i === 0 ? "eager" : "lazy"}
                     width={1600}
                     height={1008}
-                    className="absolute inset-0 size-full object-cover"
+                    className="absolute inset-0 size-full object-contain"
+                    style={{ objectPosition: "right center" }}
                   />
-                  <div className="absolute inset-0 bg-gradient-to-r from-forest/90 via-forest/70 to-forest/10" />
+                  <div className="absolute inset-0 bg-gradient-to-r from-[#1a3a2a] via-[#1a3a2a]/80 to-transparent" />
 
-                  <div className="relative flex min-h-[440px] max-w-2xl flex-col justify-center gap-5 p-8 lg:min-h-[560px] lg:p-16">
+                  <div className="relative flex min-h-[400px] max-w-2xl flex-col justify-center gap-5 p-8 lg:min-h-[480px] lg:p-16">
                     <Badge
                       variant="secondary"
                       className="w-fit rounded-full bg-cream/15 text-cream backdrop-blur"
@@ -331,40 +378,40 @@ export function MainServices() {
         ) : services.length === 0 ? (
           <p className="text-center text-muted-foreground">No services published yet.</p>
         ) : (
-        <div className="grid gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
-          {services.map((service) => {
-            const Icon = serviceIcon(service.icon);
-            return (
-            <Link 
-              key={service.id} 
-              to="/service/$id"
-              params={{ id: service.slug }}
-              className="group flex flex-col overflow-hidden rounded-3xl bg-white shadow-[0_8px_30px_rgb(0,0,0,0.04)] transition-all hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] hover:-translate-y-1 cursor-pointer"
-            >
-              <div className="relative aspect-[4/3] w-full overflow-hidden">
-                <img 
-                  src={service.image_url} 
-                  alt={service.title} 
-                  loading="lazy"
-                  className="absolute inset-0 size-full object-cover transition-transform duration-500 group-hover:scale-105"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
-                <span className="absolute bottom-4 left-4 grid size-10 place-items-center rounded-xl bg-white/90 text-primary backdrop-blur-sm shadow-sm transition-colors group-hover:bg-primary group-hover:text-white">
-                  <Icon className="size-5" />
-                </span>
-              </div>
-              <div className="flex flex-1 flex-col p-6 pt-5 text-left">
-                <h3 className="font-display text-xl font-semibold text-forest mb-3 leading-tight">
-                  {service.title}
-                </h3>
-                <p className="text-sm text-muted-foreground leading-relaxed line-clamp-3">
-                  {service.description}
-                </p>
-              </div>
-            </Link>
-            );
-          })}
-        </div>
+          <div className="grid gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
+            {services.map((service) => {
+              const Icon = serviceIcon(service.icon);
+              return (
+                <Link
+                  key={service.id}
+                  to="/service/$id"
+                  params={{ id: service.slug }}
+                  className="group flex flex-col overflow-hidden rounded-3xl bg-white shadow-[0_8px_30px_rgb(0,0,0,0.04)] transition-all hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] hover:-translate-y-1 cursor-pointer"
+                >
+                  <div className="relative aspect-[4/3] w-full overflow-hidden">
+                    <img
+                      src={service.image_url}
+                      alt={service.title}
+                      loading="lazy"
+                      className="absolute inset-0 size-full object-cover transition-transform duration-500 group-hover:scale-105"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
+                    <span className="absolute bottom-4 left-4 grid size-10 place-items-center rounded-xl bg-white/90 text-primary backdrop-blur-sm shadow-sm transition-colors group-hover:bg-primary group-hover:text-white">
+                      <Icon className="size-5" />
+                    </span>
+                  </div>
+                  <div className="flex flex-1 flex-col p-6 pt-5 text-left">
+                    <h3 className="font-display text-xl font-semibold text-forest mb-3 leading-tight">
+                      {service.title}
+                    </h3>
+                    <p className="text-sm text-muted-foreground leading-relaxed line-clamp-3">
+                      {service.description}
+                    </p>
+                  </div>
+                </Link>
+              );
+            })}
+          </div>
         )}
 
 
@@ -382,7 +429,7 @@ export function MainServices() {
 export function FeaturedProducts() {
   const fetchProducts = useServerFn(listProducts);
   const fetchCategories = useServerFn(listCategories);
-  
+
   const { data: products = [], isPending: isProductsPending } = useQuery({
     queryKey: ["products", "public"],
     queryFn: () => fetchProducts(),
@@ -919,9 +966,15 @@ export function InstagramReels() {
       </div>
 
       <div className="text-center mt-12">
-        <Button className="rounded-full px-8 py-6 text-lg bg-black text-white hover:bg-black/90 font-medium">
-          Visit Instagram
-        </Button>
+        <a
+          href="https://www.instagram.com/green_rootskitchengarden"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <Button className="rounded-full px-8 py-6 text-lg bg-black text-white hover:bg-black/90 font-medium">
+            Visit Instagram
+          </Button>
+        </a>
       </div>
     </section>
   );
@@ -1108,15 +1161,18 @@ export function Footer({ isAdmin }: { isAdmin?: boolean } = {}) {
             </p>
             <div className="mt-6 flex gap-3">
               {[
-                { Icon: Instagram, color: "text-pink-500 border-pink-500/40 hover:bg-pink-500 hover:text-white" },
-                { Icon: Facebook, color: "text-blue-500 border-blue-500/40 hover:bg-blue-600 hover:text-white" },
-                { Icon: WhatsappIcon, color: "text-green-500 border-green-500/40 hover:bg-green-500 hover:text-white" },
-                { Icon: Youtube, color: "text-red-500 border-red-500/40 hover:bg-red-600 hover:text-white" }
-              ].map(({ Icon, color }, i) => (
+                { Icon: Instagram, color: "text-pink-500 border-pink-500/40 hover:bg-pink-500 hover:text-white", href: "https://www.instagram.com/green_rootskitchengarden", label: "Instagram" },
+                { Icon: Facebook, color: "text-blue-500 border-blue-500/40 hover:bg-blue-600 hover:text-white", href: "#", label: "Facebook" },
+                { Icon: WhatsappIcon, color: "text-green-500 border-green-500/40 hover:bg-green-500 hover:text-white", href: "whatsapp://send?phone=916360988785", label: "WhatsApp", onClick: (e: React.MouseEvent) => { e.preventDefault(); openWhatsApp("916360988785"); } },
+                { Icon: Youtube, color: "text-red-500 border-red-500/40 hover:bg-red-600 hover:text-white", href: "https://www.youtube.com/@GreenRootsKitchenGarden", label: "YouTube" },
+              ].map(({ Icon, color, href, label, onClick }, i) => (
                 <a
                   key={i}
-                  href="#top"
-                  aria-label="Social link"
+                  href={href}
+                  onClick={onClick}
+                  target={href.startsWith("http") ? "_blank" : undefined}
+                  rel={href.startsWith("http") ? "noopener noreferrer" : undefined}
+                  aria-label={label}
                   className={`grid size-9 place-items-center rounded-full border bg-transparent transition-colors ${color}`}
                 >
                   <Icon className="size-4" />
@@ -1129,92 +1185,92 @@ export function Footer({ isAdmin }: { isAdmin?: boolean } = {}) {
           {!isAdmin && (
             <>
               {/* Column 2: Quick Links */}
-          <div>
-            <h3 className="font-display text-lg font-semibold">Quick Links</h3>
-            <ul className="mt-6 space-y-3.5 text-sm text-cream/80">
-              <li>
-                <Link to="/about-us" className="transition-colors hover:text-primary">
-                  About Us
-                </Link>
-              </li>
-              <li>
-                <Link to="/" hash="contact" className="transition-colors hover:text-primary">
-                  Contact Us
-                </Link>
-              </li>
-              <li>
-                <Link to="/" hash="services" className="transition-colors hover:text-primary">
-                  Our Services
-                </Link>
-              </li>
-            </ul>
-          </div>
+              <div>
+                <h3 className="font-display text-lg font-semibold">Quick Links</h3>
+                <ul className="mt-6 space-y-3.5 text-sm text-cream/80">
+                  <li>
+                    <Link to="/about-us" className="transition-colors hover:text-primary">
+                      About Us
+                    </Link>
+                  </li>
+                  <li>
+                    <Link to="/" hash="contact" className="transition-colors hover:text-primary">
+                      Contact Us
+                    </Link>
+                  </li>
+                  <li>
+                    <Link to="/" hash="services" className="transition-colors hover:text-primary">
+                      Our Services
+                    </Link>
+                  </li>
+                </ul>
+              </div>
 
-          {/* Column 3: Products */}
-          <div>
-            <h3 className="font-display text-lg font-semibold">Products</h3>
-            <ul className="mt-6 space-y-3.5 text-sm text-cream/80">
-              {[
-                { name: "Seeds", id: "seeds" },
-                { name: "Plant Care", id: "plant-care" },
-                { name: "Garden Tools", id: "garden-tools" },
-              ].map((link) => (
-                <li key={link.name}>
-                  <Link
-                    to="/category/$id"
-                    params={{ id: link.id }}
-                    className="flex items-center gap-2 transition-colors hover:text-primary"
-                  >
-                    <ArrowRight className="size-3.5" />
-                    {link.name}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
+              {/* Column 3: Products */}
+              <div>
+                <h3 className="font-display text-lg font-semibold">Products</h3>
+                <ul className="mt-6 space-y-3.5 text-sm text-cream/80">
+                  {[
+                    { name: "Seeds", id: "seeds" },
+                    { name: "Plant Care", id: "plant-care" },
+                    { name: "Garden Tools", id: "garden-tools" },
+                  ].map((link) => (
+                    <li key={link.name}>
+                      <Link
+                        to="/category/$id"
+                        params={{ id: link.id }}
+                        className="flex items-center gap-2 transition-colors hover:text-primary"
+                      >
+                        <ArrowRight className="size-3.5" />
+                        {link.name}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
 
-          {/* Column 4: Contact Us */}
-          <div>
-            <h3 className="font-display text-lg font-semibold">Contact Us</h3>
-            <ul className="mt-6 space-y-4 text-sm text-cream/80">
-              <li>
-                <a
-                  href="tel:+916360988785"
-                  className="flex items-center gap-3 transition-colors hover:text-primary"
-                >
-                  <Phone className="size-4 shrink-0" />
-                  +91 63609 88785
-                </a>
-              </li>
-              <li>
-                <a
-                  href="mailto:anilkumarainfo4u@gmail.com"
-                  className="flex items-center gap-3 transition-colors hover:text-primary"
-                >
-                  <Mail className="size-4 shrink-0" />
-                  anilkumarainfo4u@gmail.com
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#top"
-                  className="flex items-center gap-3 transition-colors hover:text-[#FF0000]"
-                >
-                  <Youtube className="size-4 shrink-0" />
-                  Watch Our Nursery Stories
-                </a>
-              </li>
-              <li className="flex items-start gap-3">
-                <MapPin className="size-4 shrink-0 mt-0.5" />
-                <span>V4 Bliss, 14th Cross Rd, Bhattarahalli, Chikkabasavanapura, Krishnarajapuram, Bengaluru, Karnataka 560049</span>
-              </li>
-              <li className="flex items-start gap-3">
-                <Clock className="size-4 shrink-0 mt-0.5" />
-                <span>Mon–Sat: 6AM – 6PM</span>
-              </li>
+              {/* Column 4: Contact Us */}
+              <div>
+                <h3 className="font-display text-lg font-semibold">Contact Us</h3>
+                <ul className="mt-6 space-y-4 text-sm text-cream/80">
+                  <li>
+                    <a
+                      href="tel:+916360988785"
+                      className="flex items-center gap-3 transition-colors hover:text-primary"
+                    >
+                      <Phone className="size-4 shrink-0" />
+                      +91 63609 88785
+                    </a>
+                  </li>
+                  <li>
+                    <a
+                      href="mailto:walkintogreenroonts@gmail.com"
+                      className="flex items-center gap-3 transition-colors hover:text-primary"
+                    >
+                      <Mail className="size-4 shrink-0" />
+                      walkintogreenroonts@gmail.com
+                    </a>
+                  </li>
+                  <li>
+                    <a
+                      href="#top"
+                      className="flex items-center gap-3 transition-colors hover:text-[#FF0000]"
+                    >
+                      <Youtube className="size-4 shrink-0" />
+                      Watch Our Nursery Stories
+                    </a>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <MapPin className="size-4 shrink-0 mt-0.5" />
+                    <span>V4 Bliss, 14th Cross Rd, Bhattarahalli, Chikkabasavanapura, Krishnarajapuram, Bengaluru, Karnataka 560049</span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <Clock className="size-4 shrink-0 mt-0.5" />
+                    <span>Mon–Sat: 6AM – 6PM</span>
+                  </li>
 
-            </ul>
-          </div>
+                </ul>
+              </div>
             </>
           )}
         </div>
