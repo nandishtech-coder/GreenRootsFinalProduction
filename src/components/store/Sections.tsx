@@ -28,7 +28,6 @@ import {
   Flower2,
   Sprout,
   Trees,
-  Star,
   Scissors,
   Sun,
   Users,
@@ -252,83 +251,55 @@ export function Hero() {
 
   return (
     <section id="top" className="px-4 pt-6 pb-2 lg:px-8">
-      <style>{`
-        @keyframes float {
-          0% { transform: translateY(0px); }
-          50% { transform: translateY(-15px); }
-          100% { transform: translateY(0px); }
-        }
-        .animate-float {
-          animation: float 6s ease-in-out infinite;
-        }
-        .animate-float-delayed {
-          animation: float 6s ease-in-out 3s infinite;
-        }
-      `}</style>
       <div className="mx-auto w-full relative">
-        <div className="absolute top-10 right-10 md:top-16 md:right-32 z-20 hidden md:flex items-center gap-4 rounded-2xl bg-white/95 backdrop-blur-sm p-4 shadow-[0_10px_40px_-10px_rgba(0,0,0,0.3)] animate-float">
-          <div className="flex size-12 shrink-0 items-center justify-center rounded-xl bg-orange-100 text-orange-500">
-            <Star className="size-6 fill-current" />
-          </div>
-          <div>
-            <p className="text-xs text-muted-foreground font-medium uppercase tracking-wider">Customer Rating</p>
-            <p className="text-lg font-bold text-forest">4.9 / 5.0</p>
-          </div>
-        </div>
-
-        <div className="absolute bottom-10 right-16 md:bottom-24 md:right-56 z-20 hidden md:flex items-center gap-4 rounded-2xl bg-white/95 backdrop-blur-sm p-4 shadow-[0_10px_40px_-10px_rgba(0,0,0,0.3)] animate-float-delayed pointer-events-none">
-          <div className="flex size-12 shrink-0 items-center justify-center rounded-xl bg-green-100 text-green-600">
-            <Sprout className="size-6" />
-          </div>
-          <div>
-            <p className="text-xs text-muted-foreground font-medium uppercase tracking-wider">Today's Harvest</p>
-            <p className="text-lg font-bold text-forest">Fresh Picked Today</p>
-          </div>
-        </div>
-
         <Carousel setApi={setApi} opts={{ loop: true }} className="overflow-hidden rounded-3xl">
           <CarouselContent className="ml-0">
             {SLIDES.map((s, i) => (
               <CarouselItem key={s.title} className="pl-0">
-                <div className="relative min-h-[400px] overflow-hidden rounded-3xl lg:min-h-[480px]" style={{ backgroundColor: '#1a3a2a' }}>
-                  <img
-                    src={s.image}
-                    alt={s.title}
-                    loading={i === 0 ? "eager" : "lazy"}
-                    width={1600}
-                    height={1008}
-                    className="absolute inset-0 size-full object-contain"
-                    style={{ objectPosition: "right center" }}
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-r from-[#1a3a2a] via-[#1a3a2a]/80 to-transparent" />
+                <div className="relative overflow-hidden rounded-[30px] bg-[#173d2d] shadow-[0_30px_80px_rgba(15,37,29,0.22)]">
+                  <div className="pointer-events-none absolute right-[-8%] top-1/2 z-10 h-[118%] w-[46%] -translate-y-1/2 rounded-[48%_48%_52%_52%/60%_60%_40%_40%] bg-[#e7e4dd] shadow-[0_0_0_1px_rgba(255,255,255,0.05)]" />
 
-                  <div className="relative flex min-h-[400px] max-w-2xl flex-col justify-center gap-5 p-8 lg:min-h-[480px] lg:p-16">
-                    <Badge
-                      variant="secondary"
-                      className="w-fit rounded-full bg-cream/15 text-cream backdrop-blur"
-                    >
-                      <Leaf className="size-3.5" />
-                      {s.eyebrow}
-                    </Badge>
-                    <h1 className="font-display text-4xl leading-[1.05] font-semibold text-cream lg:text-6xl">
-                      {s.title}
-                    </h1>
-                    <p className="max-w-lg text-base text-cream/80 lg:text-lg">{s.copy}</p>
-                    <div className="flex flex-wrap gap-3">
-                      <Button size="lg" className="rounded-xl" asChild>
-                        <Link to="/products">
-                          Shop Best Sellers
-                          <ArrowRight className="size-4" />
-                        </Link>
-                      </Button>
-                      <Button
-                        size="lg"
-                        variant="outline"
-                        asChild
-                        className="rounded-xl border-cream/60 bg-transparent text-cream hover:bg-cream hover:text-forest"
+                  <div className="relative grid gap-0 md:grid-cols-[1.18fr_0.82fr]">
+                    <div className="relative z-20 flex min-h-[260px] max-w-2xl flex-col justify-center gap-5 bg-[#173d2d] p-6 sm:p-8 md:min-h-[420px] md:p-10 lg:min-h-[500px] lg:p-16">
+                      <Badge
+                        variant="secondary"
+                        className="w-fit rounded-full bg-cream/15 text-cream backdrop-blur"
                       >
-                        <a href="#gifting">Explore Kits</a>
-                      </Button>
+                        <Leaf className="size-3.5" />
+                        {s.eyebrow}
+                      </Badge>
+                      <h1 className="font-display text-4xl leading-[1.02] font-semibold text-cream lg:text-6xl">
+                        {s.title}
+                      </h1>
+                      <p className="max-w-lg text-base text-cream/80 lg:text-lg">{s.copy}</p>
+                      <div className="flex flex-wrap gap-3">
+                        <Button size="lg" className="rounded-xl" asChild>
+                          <Link to="/products">
+                            Shop Best Sellers
+                            <ArrowRight className="size-4" />
+                          </Link>
+                        </Button>
+                        <Button
+                          size="lg"
+                          variant="outline"
+                          asChild
+                          className="rounded-xl border-cream/60 bg-transparent text-cream hover:bg-cream hover:text-forest"
+                        >
+                          <a href="#gifting">Explore Kits</a>
+                        </Button>
+                      </div>
+                    </div>
+
+                    <div className="relative z-20 h-[260px] overflow-hidden bg-[#e7e4dd] sm:h-[320px] md:h-auto md:min-h-[500px]">
+                      <img
+                        src={s.image}
+                        alt={s.title}
+                        loading={i === 0 ? "eager" : "lazy"}
+                        width={1600}
+                        height={1008}
+                        className="absolute inset-0 h-full w-full object-cover"
+                        style={{ objectPosition: s.objectPosition }}
+                      />
                     </div>
                   </div>
                 </div>
