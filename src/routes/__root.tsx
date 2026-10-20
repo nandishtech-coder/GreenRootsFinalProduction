@@ -11,10 +11,9 @@ import { useCallback, useEffect, useState, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
-import { checkBackendHealth } from "../lib/backend-health";
 import { getSiteSettings } from "../lib/settings.functions";
 import { trackPageView } from "../lib/tracking.functions";
-import { AlertTriangle, Wrench } from "lucide-react";
+import { Wrench } from "lucide-react";
 import { Toaster } from "@/components/ui/sonner";
 
 function NotFoundComponent() {
@@ -95,7 +94,11 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         rel: "stylesheet",
         href: appCss,
       },
-      { rel: "icon", href: "/favicon.ico", type: "image/x-icon" },
+      {
+        rel: "icon",
+        href: "/logo.png",
+        type: "image/png",
+      },
     ],
   }),
   loader: async ({ context }) => {
@@ -135,33 +138,6 @@ function RootComponent() {
   const { settings } = Route.useLoaderData();
   const router = useRouter();
   const currentPath = router.state.location.pathname;
-  const [backendHealthy, setBackendHealthy] = useState<boolean | null>(null);
-
-  const runHealthCheck = useCallback(async () => {
-    const healthy = await checkBackendHealth();
-    setBackendHealthy(healthy);
-  }, []);
-
-  useEffect(() => {
-    void runHealthCheck();
-
-    const intervalId = window.setInterval(() => {
-      void runHealthCheck();
-    }, 30000);
-
-    const handleFocus = () => {
-      if (document.visibilityState === "visible") {
-        void runHealthCheck();
-      }
-    };
-
-    window.addEventListener("focus", handleFocus);
-
-    return () => {
-      window.clearInterval(intervalId);
-      window.removeEventListener("focus", handleFocus);
-    };
-  }, [runHealthCheck]);
 
   useEffect(() => {
     // Generate a simple unique visitor id per session/browser if not exists
@@ -175,7 +151,7 @@ function RootComponent() {
 
   const isAdminRoute = currentPath.startsWith("/admin");
   const isMaintenanceMode = Boolean(settings?.maintenance_mode);
-  const showMaintenanceScreen = backendHealthy === false || (isMaintenanceMode && !isAdminRoute);
+  const showMaintenanceScreen = isMaintenanceMode && !isAdminRoute;
 
   if (showMaintenanceScreen) {
     return (
@@ -185,20 +161,11 @@ function RootComponent() {
             <Wrench className="w-12 h-12 text-primary" />
           </div>
           <h1 className="text-4xl font-bold tracking-tight text-foreground">
-            {backendHealthy === false ? "Backend unavailable" : settings?.maintenance_heading || "Website Under Maintenance"}
+            {settings?.maintenance_heading || "Website Under Maintenance"}
           </h1>
           <p className="text-lg text-muted-foreground whitespace-pre-wrap">
-            {backendHealthy === false
-              ? "The backend is temporarily unavailable. Scheduled warm-up checks help keep it active, but they cannot guarantee 100% uptime. Please try again in a moment."
-              : settings?.maintenance_message || "We are currently updating our website. Please check back later."}
+            {settings?.maintenance_message || "We are currently updating our website. Please check back later."}
           </p>
-          <button
-            type="button"
-            onClick={() => void runHealthCheck()}
-            className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
-          >
-            Try again
-          </button>
         </div>
       </div>
     );
