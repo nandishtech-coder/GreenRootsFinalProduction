@@ -34,6 +34,7 @@ import {
   GraduationCap,
   BookOpen,
   Award,
+  type LucideIcon,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -62,8 +63,8 @@ import { useServerFn } from "@tanstack/react-start";
 import { listServices } from "@/lib/services.functions";
 import { listProducts, listCategories } from "@/lib/products.functions";
 import { listReels } from "@/lib/reels.functions";
+import { listBlogs } from "@/lib/blogs.functions";
 import { serviceIcon } from "@/lib/service-icons";
-import { BLOGS, PRODUCTS } from "@/lib/store-data";
 
 import { ProductCard } from "./ProductCard";
 import { Reveal } from "./Reveal";
@@ -557,18 +558,8 @@ export function ProductRow({ title, filterTag }: { title: string, filterTag?: st
 export function GiftingBanner() {
   return (
     <section id="gifting" className="px-4 py-14 lg:px-8 lg:py-20">
-      <div className="mx-auto grid w-full overflow-hidden rounded-3xl bg-forest lg:grid-cols-2">
-        <div className="relative min-h-72 lg:min-h-[460px]">
-          <img
-            src={gifting}
-            alt="Plant gift hamper with ceramic planter and seed packets"
-            loading="lazy"
-            width={1200}
-            height={912}
-            className="absolute inset-0 size-full object-cover"
-          />
-        </div>
-        <div className="flex flex-col justify-center gap-5 p-8 lg:p-14">
+      <div className="mx-auto w-full rounded-3xl bg-forest p-8 text-cream lg:p-14">
+        <div className="flex max-w-3xl flex-col gap-5">
           <Badge variant="secondary" className="w-fit rounded-full bg-cream/15 text-cream">
             <Gift className="size-3.5" />
             Corporate & festive gifting
@@ -645,6 +636,12 @@ export function TrustRibbon() {
 }
 
 export function Blogs() {
+  const fetchBlogs = useServerFn(listBlogs);
+  const { data: blogs = [], isPending } = useQuery({
+    queryKey: ["blogs", "public"],
+    queryFn: () => fetchBlogs(),
+  });
+
   return (
     <section className="px-4 py-14 lg:px-8 lg:py-20">
       <div className="mx-auto w-full">
@@ -657,52 +654,66 @@ export function Blogs() {
               Grow smarter, season by season
             </h2>
           </div>
-          <Button variant="outline" className="rounded-xl">
-            View all guides
+          <Button variant="outline" className="rounded-xl" asChild>
+            <Link to="/blogs">View all guides</Link>
           </Button>
         </div>
 
-        <div className="mt-10 grid gap-6 md:grid-cols-3">
-          {BLOGS.map((b) => (
-            <article
-              key={b.title}
-              className="group hover-lift flex flex-col overflow-hidden rounded-2xl border border-border bg-card shadow-[var(--shadow-soft)]"
-            >
-              <div className="aspect-[16/10] overflow-hidden">
-                <img
-                  src={b.image}
-                  alt={b.title}
-                  loading="lazy"
-                  width={900}
-                  height={560}
-                  className="size-full object-cover transition-transform duration-500 group-hover:scale-105"
-                />
-              </div>
-              <div className="flex flex-1 flex-col gap-3 p-6">
-                <div className="flex items-center gap-4 text-xs text-muted-foreground">
-                  <span className="flex items-center gap-1.5">
-                    <CalendarDays className="size-3.5" />
-                    {b.date}
-                  </span>
-                  <span className="flex items-center gap-1.5">
-                    <Clock className="size-3.5" />
-                    {b.read}
-                  </span>
+        {isPending ? (
+          <div className="mt-10 grid gap-6 md:grid-cols-3">
+            {Array.from({ length: 3 }).map((_, i) => (
+              <div key={i} className="h-80 animate-pulse rounded-2xl bg-muted" />
+            ))}
+          </div>
+        ) : blogs.length === 0 ? (
+          <div className="mt-10 rounded-2xl border border-dashed border-border bg-card p-8 text-center text-muted-foreground">
+            No blog articles published yet.
+          </div>
+        ) : (
+          <div className="mt-10 grid gap-6 md:grid-cols-3">
+            {blogs.slice(0, 3).map((b) => (
+              <article
+                key={b.id}
+                className="group hover-lift flex flex-col overflow-hidden rounded-2xl border border-border bg-card shadow-[var(--shadow-soft)]"
+              >
+                <div className="aspect-[16/10] overflow-hidden">
+                  <img
+                    src={b.image_url}
+                    alt={b.title}
+                    loading="lazy"
+                    width={900}
+                    height={560}
+                    className="size-full object-cover transition-transform duration-500 group-hover:scale-105"
+                  />
                 </div>
-                <h3 className="font-display text-lg leading-snug font-semibold text-forest">
-                  {b.title}
-                </h3>
-                <a
-                  href="#top"
-                  className="mt-auto flex items-center gap-1 text-sm font-medium text-primary"
-                >
-                  Read Article
-                  <ArrowRight className="size-4 transition-transform group-hover:translate-x-1" />
-                </a>
-              </div>
-            </article>
-          ))}
-        </div>
+                <div className="flex flex-1 flex-col gap-3 p-6">
+                  <div className="flex items-center gap-4 text-xs text-muted-foreground">
+                    <span className="flex items-center gap-1.5">
+                      <CalendarDays className="size-3.5" />
+                      {new Date(b.published_date).toLocaleDateString("en-IN", { day: "2-digit", month: "short", year: "numeric" })}
+                    </span>
+                    <span className="flex items-center gap-1.5">
+                      <Clock className="size-3.5" />
+                      {b.excerpt ? "5 min read" : "5 min read"}
+                    </span>
+                  </div>
+                  <h3 className="font-display text-lg leading-snug font-semibold text-forest">
+                    {b.title}
+                  </h3>
+                  <p className="text-sm text-muted-foreground line-clamp-3">{b.excerpt}</p>
+                  <Link
+                    to="/blog/$slug"
+                    params={{ slug: b.slug }}
+                    className="mt-auto flex items-center gap-1 text-sm font-medium text-primary"
+                  >
+                    Read Article
+                    <ArrowRight className="size-4 transition-transform group-hover:translate-x-1" />
+                  </Link>
+                </div>
+              </article>
+            ))}
+          </div>
+        )}
       </div>
     </section>
   );
@@ -951,70 +962,89 @@ export function InstagramReels() {
   );
 }
 
-const SERVICES = [
+type ServiceCard = {
+  title: string;
+  description: string;
+  icon: string | LucideIcon;
+};
+
+const SERVICES: ServiceCard[] = [
   {
     icon: Search,
     title: "Garden Consultancy",
-    copy: "Expert advice for your green spaces",
+    description: "Expert advice for your green spaces",
   },
   {
     icon: Sun,
     title: "Terrace & Rooftop Gardening",
-    copy: "Transform your elevated spaces",
+    description: "Transform your elevated spaces",
   },
   {
     icon: Home,
     title: "Backyard Garden Setup",
-    copy: "Beautiful and lush backyards",
+    description: "Beautiful and lush backyards",
   },
   {
     icon: Sprout,
     title: "Organic Kitchen Garden",
-    copy: "Grow your own fresh produce",
+    description: "Grow your own fresh produce",
   },
   {
     icon: Building2,
     title: "School Kitchen Garden",
-    copy: "Educational green spaces for kids",
+    description: "Educational green spaces for kids",
   },
   {
     icon: GraduationCap,
     title: "Gardening Training for Children",
-    copy: "Interactive learning for young minds",
+    description: "Interactive learning for young minds",
   },
   {
     icon: Users,
     title: "Group Gardening Training",
-    copy: "Collaborative learning sessions",
+    description: "Collaborative learning sessions",
   },
   {
     icon: Flower2,
     title: "Garden Setup & Repotting",
-    copy: "Fresh soil and healthier roots",
+    description: "Fresh soil and healthier roots",
   },
   {
     icon: Scissors,
     title: "Garden Maintenance",
-    copy: "Expert care for your green assets",
+    description: "Expert care for your green assets",
   },
   {
     icon: Truck,
     title: "Doorstep Gardening Training",
-    copy: "Learn gardening at your home",
+    description: "Learn gardening at your home",
   },
   {
     icon: Trees,
     title: "Organic Gardening Training & Setup",
-    copy: "Complete organic solutions",
+    description: "Complete organic solutions",
   },
 ];
 
 export function OurServices() {
   const [active, setActive] = useState(0);
   const trackRef = useRef<HTMLDivElement>(null);
+  const fetchServices = useServerFn(listServices);
+  const { data: services = [], isPending } = useQuery({
+    queryKey: ["services", "public"],
+    queryFn: () => fetchServices(),
+  });
+
+  const serviceList: ServiceCard[] = services.length > 0
+    ? services.map((service) => ({
+        title: service.title,
+        description: service.description,
+        icon: service.icon ? serviceIcon(service.icon) : Leaf,
+      }))
+    : SERVICES;
 
   const goTo = (n: number) => {
-    const idx = (n + SERVICES.length) % SERVICES.length;
+    const idx = (n + serviceList.length) % serviceList.length;
     setActive(idx);
     const el = trackRef.current?.children[idx] as HTMLElement | undefined;
     el?.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "center" });
@@ -1064,24 +1094,36 @@ export function OurServices() {
         </div>
 
         <div className="relative mt-10 overflow-hidden w-full">
-          <div className="flex w-max marquee-track">
-            {[...SERVICES, ...SERVICES].map((service, i) => (
-              <div
-                key={`${service.title}-${i}`}
-                className="flex w-48 sm:w-64 shrink-0 flex-col items-center px-4 text-center"
-              >
-                <span className="grid size-20 sm:size-24 place-items-center border-b border-forest-foreground/40">
-                  <service.icon strokeWidth={1.3} className="size-12 sm:size-16" />
-                </span>
-                <h3 className="mt-5 font-display text-xl font-semibold md:text-2xl">
-                  {service.title}
-                </h3>
-                <p className="mt-2 max-w-xs text-sm leading-relaxed text-forest-foreground/70">
-                  {service.copy}
-                </p>
-              </div>
-            ))}
-          </div>
+          {isPending ? (
+            <div className="flex justify-center px-4">
+              <div className="h-32 w-full max-w-5xl animate-pulse rounded-3xl bg-forest/20" />
+            </div>
+          ) : (
+            <div className="flex w-max marquee-track" ref={trackRef} onScroll={onScroll}>
+              {[...serviceList, ...serviceList].map((service, i) => {
+                const ServiceIcon = typeof service.icon === "string" ? serviceIcon(service.icon) : service.icon;
+                const title = service.title;
+                const copy = service.description;
+
+                return (
+                  <div
+                    key={`${title}-${i}`}
+                    className="flex w-48 sm:w-64 shrink-0 flex-col items-center px-4 text-center"
+                  >
+                    <span className="grid size-20 sm:size-24 place-items-center border-b border-forest-foreground/40">
+                      <ServiceIcon strokeWidth={1.3} className="size-12 sm:size-16" />
+                    </span>
+                    <h3 className="mt-5 font-display text-xl font-semibold md:text-2xl">
+                      {title}
+                    </h3>
+                    <p className="mt-2 max-w-xs text-sm leading-relaxed text-forest-foreground/70">
+                      {copy}
+                    </p>
+                  </div>
+                );
+              })}
+            </div>
+          )}
         </div>
       </div>
 

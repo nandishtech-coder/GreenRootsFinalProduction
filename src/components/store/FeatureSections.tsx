@@ -4,139 +4,64 @@ import { useServerFn } from "@tanstack/react-start";
 import { Link } from "@tanstack/react-router";
 import { listBlogs } from "@/lib/blogs.functions";
 import { Button } from "@/components/ui/button";
-import gifting from "@/assets/gifting.jpg";
-import tools from "@/assets/p-tools.jpg";
-import plants from "@/assets/p-plants.jpg";
-import seeds from "@/assets/p-seeds.jpg";
-import mix from "@/assets/p-mix.jpg";
-import nutrient from "@/assets/p-nutrient.jpg";
-import servicesPeaceLily from "@/assets/services-peace-lily.jpg";
-import monstera from "@/assets/plant-monstera.png";
-import fiddleLeaf from "@/assets/plant-fiddle.png";
-import snakePlant from "@/assets/plant-snake.png";
-import pothos from "@/assets/plant-pothos.png";
-import blogRakhi from "@/assets/blog-rakhi.png";
-import blogCompost from "@/assets/blog-compost.png";
-import blogKitchen from "@/assets/blog-kitchen.png";
 
-/* 1. Gifting story — side-by-side layout with overlapping images */
+/* 1. Gifting story — content-only section without hardcoded imagery */
 export function GiftsGrowWithTime() {
   return (
     <section aria-labelledby="gifts-grow-heading" className="py-16 lg:py-24">
       <div className="mx-auto w-full px-4 lg:px-8">
-        <div className="grid grid-cols-1 gap-12 lg:grid-cols-2 lg:gap-16 lg:items-center">
-          
-          <div className="grid grid-cols-2 gap-4 sm:gap-6">
-            <div className="overflow-hidden rounded-3xl aspect-[4/5] shadow-[var(--shadow-soft)]">
-              <img
-                src={servicesPeaceLily}
-                alt="Balcony garden with peace lily"
-                loading="lazy"
-                className="size-full object-cover transition-transform duration-700 hover:scale-105"
-              />
-            </div>
-            <div className="overflow-hidden rounded-3xl aspect-[4/5] mt-10 sm:mt-16 shadow-[var(--shadow-soft)]">
-              <img
-                src={gifting}
-                alt="Gifting plants"
-                loading="lazy"
-                className="size-full object-cover transition-transform duration-700 hover:scale-105"
-              />
-            </div>
-          </div>
-
-          <div className="max-w-xl">
-            <h2
-              id="gifts-grow-heading"
-              className="font-display text-4xl leading-tight font-semibold text-forest lg:text-5xl lg:leading-[1.1]"
-            >
-              Because the Best Gifts Grow with Time
-            </h2>
-            <p className="mt-6 text-base leading-relaxed text-forest/80 sm:text-lg">
-              Celebrate birthdays, anniversaries and milestones with plants and green gifts that last
-              longer than moments. Delight your loved ones with beautifully curated plant hampers and 
-              eco-friendly gifts for every occasion.
-            </p>
-            <Button
-              size="lg"
-              asChild
-              className="mt-10 h-14 w-full rounded-full bg-forest px-8 text-base font-medium text-forest-foreground hover:bg-forest-deep sm:w-auto"
-            >
-              <Link to="/green-gifts">
-                Explore Gifting Range
-                <ArrowRight className="ml-2 size-4" />
-              </Link>
-            </Button>
-          </div>
-
+        <div className="mx-auto max-w-3xl text-center">
+          <h2
+            id="gifts-grow-heading"
+            className="font-display text-4xl leading-tight font-semibold text-forest lg:text-5xl lg:leading-[1.1]"
+          >
+            Because the Best Gifts Grow with Time
+          </h2>
+          <p className="mt-6 text-base leading-relaxed text-forest/80 sm:text-lg">
+            Celebrate birthdays, anniversaries and milestones with plants and green gifts that last
+            longer than moments. Delight your loved ones with beautifully curated plant hampers and
+            eco-friendly gifts for every occasion.
+          </p>
+          <Button
+            size="lg"
+            asChild
+            className="mt-10 h-14 w-full rounded-full bg-forest px-8 text-base font-medium text-forest-foreground hover:bg-forest-deep sm:w-auto"
+          >
+            <Link to="/green-gifts">
+              Explore Gifting Range
+              <ArrowRight className="ml-2 size-4" />
+            </Link>
+          </Button>
         </div>
       </div>
     </section>
   );
 }
 
-/* 2. Fan Favorites — rotated diamond collage */
-const DIAMONDS = [
-  { image: monstera, alt: "Beautiful Monstera Deliciosa in a terracotta pot", cls: "col-start-2 row-start-1" },
-  {
-    image: fiddleLeaf,
-    alt: "Tall Fiddle Leaf Fig tree in a white ceramic planter",
-    cls: "col-start-1 row-start-2",
-  },
-  { image: snakePlant, alt: "Snake Plant in a dark geometric planter", cls: "col-start-3 row-start-2" },
-  {
-    image: pothos,
-    alt: "Golden Pothos trailing from a hanging macrame planter",
-    cls: "col-start-2 row-start-3",
-  },
-];
-
 export function FanFavorites() {
   return (
     <section aria-labelledby="fan-favorites-heading" className="py-16 lg:py-24">
       <div className="mx-auto w-full px-4 lg:px-8">
-        <div className="grid grid-cols-1 gap-12 lg:grid-cols-2 lg:gap-16 lg:items-center">
-          
-          <div className="mx-auto grid w-full max-w-md grid-cols-3 grid-rows-3 place-items-center gap-2 lg:mx-0 lg:max-w-lg">
-            {DIAMONDS.map((d) => (
-              <div
-                key={d.alt}
-                className={`${d.cls} aspect-square w-full rotate-45 overflow-hidden shadow-[var(--shadow-soft)] transition-transform duration-500 hover:scale-105 hover:z-10`}
-              >
-                <img
-                  src={d.image}
-                  alt={d.alt}
-                  loading="lazy"
-                  width={600}
-                  height={600}
-                  className="size-full -rotate-45 scale-150 object-cover"
-                />
-              </div>
-            ))}
-          </div>
-
-          <div className="max-w-xl text-center lg:text-left">
-            <h2
-              id="fan-favorites-heading"
-              className="font-display text-4xl leading-tight font-semibold text-forest lg:text-5xl lg:leading-[1.1]"
-            >
-              Fan Favorites
-            </h2>
-            <p className="mt-6 text-base leading-relaxed text-forest/80 sm:text-lg">
-              Check out our top plants for the season.
-            </p>
-            <Button
-              size="lg"
-              asChild
-              className="mt-10 h-14 w-full rounded-full bg-forest px-8 text-base font-medium text-forest-foreground hover:bg-forest-deep sm:w-auto"
-            >
-              <Link to="/products">
-                Shop Best Sellers
-                <ArrowRight className="ml-2 size-4" />
-              </Link>
-            </Button>
-          </div>
-
+        <div className="mx-auto max-w-3xl text-center">
+          <h2
+            id="fan-favorites-heading"
+            className="font-display text-4xl leading-tight font-semibold text-forest lg:text-5xl lg:leading-[1.1]"
+          >
+            Fan Favorites
+          </h2>
+          <p className="mt-6 text-base leading-relaxed text-forest/80 sm:text-lg">
+            Check out our top plants for the season.
+          </p>
+          <Button
+            size="lg"
+            asChild
+            className="mt-10 h-14 w-full rounded-full bg-forest px-8 text-base font-medium text-forest-foreground hover:bg-forest-deep sm:w-auto"
+          >
+            <Link to="/products">
+              Shop Best Sellers
+              <ArrowRight className="ml-2 size-4" />
+            </Link>
+          </Button>
         </div>
       </div>
     </section>

@@ -42,7 +42,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { NAV, PRODUCTS } from "@/lib/store-data";
+import { NAV } from "@/lib/store-data";
 import { useCart } from "./cart";
 
 function AnnouncementBar() {
@@ -86,8 +86,8 @@ function SearchDialog({
     queryKey: ["public-products"],
     queryFn: () => fetchProducts(),
   });
-  
-  const productsList = dbProducts.length > 0 ? dbProducts : PRODUCTS;
+
+  const productsList = dbProducts;
 
   const results = q.trim()
     ? productsList.filter((p) => p.title.toLowerCase().includes(q.toLowerCase())).slice(0, 6)
@@ -223,8 +223,8 @@ export function Header() {
     queryKey: ["public-products"],
     queryFn: () => fetchProducts(),
   });
-  
-  const productsList = dbProducts.length > 0 ? dbProducts : PRODUCTS;
+
+  const productsList = dbProducts;
 
   const results = searchQuery.trim()
     ? productsList.filter((p) => p.title.toLowerCase().includes(searchQuery.toLowerCase())).slice(0, 6)
