@@ -1163,7 +1163,7 @@ export function Footer({ isAdmin }: { isAdmin?: boolean } = {}) {
               <div className="flex flex-col">
                 <span className="font-display text-2xl font-semibold leading-none">GreenRoots</span>
                 <span className="mt-1 text-[10px] tracking-[0.2em] text-cream/70 uppercase">
-                  Farm Fresh • Since 2023
+                  LEARN. GROW. HARVEST
                 </span>
               </div>
             </div>
@@ -1266,7 +1266,9 @@ export function Footer({ isAdmin }: { isAdmin?: boolean } = {}) {
                   </li>
                   <li>
                     <a
-                      href="#top"
+                      href="https://www.youtube.com/@GreenRootsKitchenGarden"
+                      target="_blank"
+                      rel="noreferrer"
                       className="flex items-center gap-3 transition-colors hover:text-[#FF0000]"
                     >
                       <Youtube className="size-4 shrink-0" />
