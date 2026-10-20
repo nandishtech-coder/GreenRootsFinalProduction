@@ -7,10 +7,11 @@ import {
   HeadContent,
   Scripts,
 } from "@tanstack/react-router";
-import { useEffect, type ReactNode } from "react";
+import { useCallback, useEffect, useState, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
+import { checkBackendHealth } from "../lib/backend-health";
 import { getSiteSettings } from "../lib/settings.functions";
 import { trackPageView } from "../lib/tracking.functions";
 import { AlertTriangle, Wrench } from "lucide-react";
@@ -134,6 +135,33 @@ function RootComponent() {
   const { settings } = Route.useLoaderData();
   const router = useRouter();
   const currentPath = router.state.location.pathname;
+  const [backendHealthy, setBackendHealthy] = useState<boolean | null>(null);
+
+  const runHealthCheck = useCallback(async () => {
+    const healthy = await checkBackendHealth();
+    setBackendHealthy(healthy);
+  }, []);
+
+  useEffect(() => {
+    void runHealthCheck();
+
+    const intervalId = window.setInterval(() => {
+      void runHealthCheck();
+    }, 30000);
+
+    const handleFocus = () => {
+      if (document.visibilityState === "visible") {
+        void runHealthCheck();
+      }
+    };
+
+    window.addEventListener("focus", handleFocus);
+
+    return () => {
+      window.clearInterval(intervalId);
+      window.removeEventListener("focus", handleFocus);
+    };
+  }, [runHealthCheck]);
 
   useEffect(() => {
     // Generate a simple unique visitor id per session/browser if not exists
@@ -146,9 +174,10 @@ function RootComponent() {
   }, [currentPath]);
 
   const isAdminRoute = currentPath.startsWith("/admin");
-  const isMaintenanceMode = settings?.maintenance_mode;
+  const isMaintenanceMode = Boolean(settings?.maintenance_mode);
+  const showMaintenanceScreen = backendHealthy === false || (isMaintenanceMode && !isAdminRoute);
 
-  if (isMaintenanceMode && !isAdminRoute) {
+  if (showMaintenanceScreen) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-background px-4">
         <div className="max-w-xl text-center space-y-6 bg-card p-10 rounded-2xl shadow-xl border">
@@ -156,11 +185,20 @@ function RootComponent() {
             <Wrench className="w-12 h-12 text-primary" />
           </div>
           <h1 className="text-4xl font-bold tracking-tight text-foreground">
-            {settings?.maintenance_heading || "Website Under Maintenance"}
+            {backendHealthy === false ? "Backend unavailable" : settings?.maintenance_heading || "Website Under Maintenance"}
           </h1>
           <p className="text-lg text-muted-foreground whitespace-pre-wrap">
-            {settings?.maintenance_message || "We are currently updating our website. Please check back later."}
+            {backendHealthy === false
+              ? "The backend is temporarily unavailable. Scheduled warm-up checks help keep it active, but they cannot guarantee 100% uptime. Please try again in a moment."
+              : settings?.maintenance_message || "We are currently updating our website. Please check back later."}
           </p>
+          <button
+            type="button"
+            onClick={() => void runHealthCheck()}
+            className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
+          >
+            Try again
+          </button>
         </div>
       </div>
     );
