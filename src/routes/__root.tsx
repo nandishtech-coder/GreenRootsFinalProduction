@@ -83,6 +83,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "viewport", content: "width=device-width, initial-scale=1" },
       { title: "GreenRoots" },
       { name: "description", content: "Urban gardening essentials for greener homes." },
+      { name: "google-site-verification", content: "S7VKqQCILCUr_PtLlE0d_gVjLa6J7VjnOlxUN1yPeeM" },
       { name: "author", content: "GreenRoots" },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
